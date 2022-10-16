@@ -5,12 +5,12 @@ import datetime
 from datetime import date
 import collections
 import sys
+import config
 
 city = sys.argv[1]
 country = sys.argv[2]
 
-OWM_key="729f560fa0bdebc7f35ed16adedcaff1"
-data = requests.get(f'http://api.openweathermap.org/data/2.5/forecast/?q={city},{country}&appid={OWM_key}&units=metric&lang=en')
+data = requests.get(f'http://api.openweathermap.org/data/2.5/forecast/?q={city},{country}&appid={config.OWM_key}&units=metric&lang=en')
 
 def get_weather(data):
     
