@@ -7,10 +7,23 @@ import collections
 import sys
 import config
 
-city = sys.argv[1]
-country = sys.argv[2]
+if len(sys.argv) > 2:
+    city = sys.argv[1]
+    country = sys.argv[2]
+else:
+    print('''
+Too few arguments, there needs to be a city and a country, like: 'São Paulo' 'BR'. Using this example as sample for the script.
+''')
+    city = 'São Paulo'
+    country = 'BR'
 
 data = requests.get(f'http://api.openweathermap.org/data/2.5/forecast/?q={city},{country}&appid={config.OWM_key}&units=metric&lang=en')
+
+if data.ok:
+    print('''Getting Data for {}, {}'''.format(city, country))
+else:
+    print('City or Country not found, stopping script.')
+    exit()
 
 def get_weather(data):
     
@@ -37,8 +50,9 @@ def get_weather(data):
         weather_info.append(weather_hour)
     
     return weather_info
-    
+
 df = pd.DataFrame(get_weather(data))
+    
 df.weather_datetime = pd.to_datetime(df.weather_datetime)
 
 hour = [
@@ -85,13 +99,13 @@ if 0.6 < v_rain <= 0.8:
 if 0.8 < v_rain <= 1:  
     chance = 'very high'   
 
-print('''
-City: {}, {}
-Date: {}      
+#City: {}, {}
+print('''Date: {}      
 
 Most of tomorrow weather will be {}{}, with a {} chance of rain.
 
 Temperatures tomorrow may rise from a low of {} degrees at {} to a high of {} degrees at {}.
-'''.format(city, country, date_tomorrow, snow, most_weather, chance, min_temp, min_temp_hr, max_temp, max_temp_hr)
+'''.format(#city, country, 
+           date_tomorrow, snow, most_weather, chance, min_temp, min_temp_hr, max_temp, max_temp_hr)
      )
 
